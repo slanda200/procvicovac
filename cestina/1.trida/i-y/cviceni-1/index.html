@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Cvičení – Procvičovač</title>
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --muted: #64748b;
+      --success: #86efac;
+      --error: #fca5a5;
+      --warning: #fde68a;
+      --line: #e5e7eb;
+    }
+
+    body.dark {
+      --bg: #0f172a;
+      --card: #111827;
+      --primary: #60a5fa;
+      --muted: #cbd5f5;
+      --success: #4ade80;
+      --error: #f87171;
+      --warning: #facc15;
+      --line: #1f2937;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: #0f172a;
+    }
+
+    body.dark {
+      color: #e2e8f0;
+    }
+
+    .navbar {
+      background: var(--card);
+      border-bottom: 1px solid var(--line);
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .nav-right a {
+      text-decoration: none;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .mode-btn {
+      border: none;
+      background: transparent;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .card {
+      background: var(--card);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    }
+
+    h1 { margin-top: 0; }
+
+    .instruction {
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .blank {
+      background: var(--warning);
+      padding: 0 0.35rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .check-btn {
+      margin-top: 1.5rem;
+      padding: 0.8rem 1.4rem;
+      border-radius: 8px;
+      border: none;
+      background: var(--primary);
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    #result {
+      margin-top: 1rem;
+      font-weight: 600;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 1.8rem;
+      border-radius: 14px;
+      text-align: center;
+      min-width: 260px;
+    }
+
+    .options button {
+      font-size: 1.4rem;
+      margin: 0.4rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background: #e5e7eb;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="navbar">
+  <a href="/" class="logo">Procvičovač</a>
+  <div class="nav-right">
+    <button id="mode-toggle" class="mode-btn" title="Přepnout světlý / tmavý režim">🌞</button>
+    <a href="#">Přihlásit se</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="card">
+    <h1 id="title">Načítám…</h1>
+    <p class="instruction" id="instruction"></p>
+
+    <div id="exercise-text"></div>
+
+    <button class="check-btn" onclick="checkAnswers()">Zkontrolovat</button>
+    <div id="result"></div>
+  </div>
+</div>
+
+<div id="popup" class="modal">
+  <div class="modal-content">
+    <h3>Vyber písmeno</h3>
+    <div class="options" id="options"></div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  let currentBlank = null;
+  let correctAnswers = [];
+  let allOptions = [];
+
+  const toggle = document.getElementById("mode-toggle");
+  if (localStorage.getItem("mode") === "dark" ||
+      (!localStorage.getItem("mode") && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+    document.body.classList.add("dark");
+    toggle.textContent = "🌙";
+  } else {
+    toggle.textContent = "🌞";
+  }
+
+  toggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+    toggle.textContent = document.body.classList.contains("dark") ? "🌙" : "🌞";
+    localStorage.setItem("mode", document.body.classList.contains("dark") ? "dark" : "light");
+  });
+
+  fetch("exercise.json")
+    .then(r => r.json())
+    .then(data => {
+
+      document.getElementById("title").textContent = data.title;
+      document.getElementById("instruction").textContent = data.instruction;
+
+      correctAnswers = data.answers;
+      allOptions = data.options;
+
+      let index = 0;
+      let html = "";
+
+      data.text.forEach(line => {
+        html += "<p>" + line.replace(/<>/g, () =>
+          `<span class="blank" data-index="${index++}">_</span>`
+        ) + "</p>";
+      });
+
+      document.getElementById("exercise-text").innerHTML = html;
+
+      document.querySelectorAll(".blank").forEach(b => {
+        b.addEventListener("click", () => {
+          currentBlank = Number(b.dataset.index);
+          openPopup();
+        });
+      });
+    });
+
+  function openPopup() {
+    const popup = document.getElementById("popup");
+    const optionsDiv = document.getElementById("options");
+
+    optionsDiv.innerHTML = "";
+
+    allOptions.forEach(o => {
+      const btn = document.createElement("button");
+      btn.textContent = o;
+      btn.onclick = () => fill(o);
+      optionsDiv.appendChild(btn);
+    });
+
+    popup.style.display = "flex";
+  }
+
+  function fill(letter) {
+    document.querySelectorAll(".blank")[currentBlank].textContent = letter;
+    document.getElementById("popup").style.display = "none";
+  }
+
+  window.checkAnswers = function() {
+    const blanks = document.querySelectorAll(".blank");
+    let correct = 0;
+
+    blanks.forEach((b, i) => {
+      if (b.textContent === correctAnswers[i]) {
+        b.style.background = "var(--success)";
+        correct++;
+      } else {
+        b.style.background = "var(--error)";
+      }
+    });
+
+    document.getElementById("result").textContent =
+      `Výsledek: ${correct} / ${correctAnswers.length}`;
+  };
+
+});
+</script>
+
+</body>
+</html>
