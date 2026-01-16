@@ -1,50 +1,55 @@
 ---
 layout: default
-title: Procvičovač – procvičuj zábavně
+title: Čeština – 1. třída
 ---
 
-<div class="page">
-  <div class="navbar">
-    <a href="/" class="logo">Procvičovač</a>
-    <div class="nav-right">
-      <button id="mode-toggle" class="mode-btn" title="Přepnout světlý / tmavý režim">🌞</button>
-      <a href="#" class="profile-btn">Přihlásit se / Profil</a>
+<div class="layout-wrapper">
+  <!-- Horní lišta s mode toggle a přihlášením -->
+  <header class="top-bar">
+    <div class="container">
+      <a href="/" class="logo">Procvičovač</a>
+      
+      <div class="right-controls">
+        <button id="mode-toggle" class="mode-btn" title="Přepnout světlý / tmavý režim">🌞</button>
+        <a href="#" class="profile-btn">Přihlásit se / Profil</a>
+      </div>
     </div>
+  </header>
+
+  <!-- Obsah: sidebar s tématy + hlavní plocha -->
+  <div class="content-area">
+    <!-- Levý sidebar s tématy (s ikonami a box stylem) -->
+    <aside class="sidebar">
+      <nav>
+        <ul class="menu">
+          <li><a href="/cestina/1.trida/i-y/" class="menu-title">🔤 Vybírání i/y</a></li>
+
+          <!-- Připravené, ale zatím bez obsahu (aby to neházel 404) -->
+          <li><a href="#" class="menu-title disabled" aria-disabled="true">📖 Abeceda a písmenka (brzy)</a></li>
+          <li><a href="#" class="menu-title disabled" aria-disabled="true">🔍 Hledání chyb (brzy)</a></li>
+          <li><a href="#" class="menu-title disabled" aria-disabled="true">✏️ Doplňování do textu (brzy)</a></li>
+          <li><a href="#" class="menu-title disabled" aria-disabled="true">✅ Zaškrtávání (brzy)</a></li>
+          <li><a href="#" class="menu-title disabled" aria-disabled="true">🔗 Spojování (brzy)</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Hlavní obsah – úvod do třídy -->
+    <main class="main-content">
+      <h1>Čeština – 1. třída</h1>
+      <p>Zde procvičuj základní češtinu pro 1. třídu. Vyber téma v levém menu a začni s úlohami!</p>
+
+      <!-- Teaser na první téma -->
+      <div class="teaser-box">
+        <h2>Začni s i/y</h2>
+        <a href="/cestina/1.trida/i-y/" class="start-btn">Přejít na úlohy</a>
+      </div>
+    </main>
   </div>
-
-  <main class="container">
-    <div class="card">
-      <h1>Vítej v Procvičovači!</h1>
-      <p class="instruction">Vyber si předmět a začni procvičovat. Zábavně, zdarma a s přehledem tvého pokroku.</p>
-
-      <div class="subject-grid">
-        <a href="/cestina/" class="subject-card">
-          <span class="subject-title">Čeština</span>
-          <span class="subject-desc">i/y, abeceda, slovní zásoba</span>
-        </a>
-        <a href="/matematika/" class="subject-card">
-          <span class="subject-title">Matematika</span>
-          <span class="subject-desc">počítání, logika, slovní úlohy</span>
-        </a>
-        <a href="/anglictina/" class="subject-card">
-          <span class="subject-title">Angličtina</span>
-          <span class="subject-desc">slovíčka, gramatika, fráze</span>
-        </a>
-        <a href="/it/" class="subject-card">
-          <span class="subject-title">IT</span>
-          <span class="subject-desc">základy informatiky a digitální svět</span>
-        </a>
-      </div>
-
-      <div class="cta">
-        <h2>Začni hned s češtinou</h2>
-        <a href="/cestina/" class="start-btn">Přejít na češtinu</a>
-      </div>
-    </div>
-  </main>
 </div>
 
 <style>
+  /* === DEFINITIVNĚ SKRYJE DEFAULTNÍ MINIMA HEADER (to samé jako na hlavní stránce) === */
   .site-header,
   .header,
   .post-header,
@@ -58,163 +63,201 @@ title: Procvičovač – procvičuj zábavně
     display: none !important;
   }
 
+  /* Zajistí, že tvůj header zůstane nahoře */
+  .top-bar {
+    display: flex !important;
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  }
+
+  /* Posune obsah dolů, aby nebyl překrytý */
+  .content-area,
+  main,
+  .main-content {
+    margin-top: 75px !important;
+  }
+
+  /* Tvé původní styly (zůstávají stejné) */
   :root {
-    --bg: #f8fafc;
-    --card: #ffffff;
-    --primary: #2563eb;
-    --muted: #64748b;
-    --line: #e5e7eb;
-    --shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+    --bg: #f8f9fa;
+    --text: #1f2937;
+    --header-bg: #e5e7eb;
+    --sidebar-bg: #f1f5f9;
+    --sidebar-hover: #e2e8f0;
+    --accent: #64748b;
   }
 
   body.dark {
     --bg: #0f172a;
-    --card: #111827;
-    --primary: #60a5fa;
-    --muted: #cbd5f5;
-    --line: #1f2937;
-    --shadow: 0 12px 28px rgba(15, 23, 42, 0.35);
+    --text: #e2e8f0;
+    --header-bg: #1e293b;
+    --sidebar-bg: #1e293b;
+    --sidebar-hover: #334155;
+    --accent: #94a3b8;
   }
 
   body {
-    margin: 0;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     background: var(--bg);
-    color: #0f172a;
+    color: var(--text);
+    margin: 0;
+    font-family: system-ui, -apple-system, sans-serif;
   }
 
-  body.dark {
-    color: #e2e8f0;
-  }
-
-  .page {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .navbar {
-    background: var(--card);
-    border-bottom: 1px solid var(--line);
-    padding: 0.8rem 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-
-  .logo {
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: var(--primary);
-    text-decoration: none;
-  }
-
-  .nav-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .profile-btn {
-    text-decoration: none;
-    color: var(--muted);
-    font-weight: 600;
-  }
-
-  .mode-btn {
-    border: none;
-    background: transparent;
-    font-size: 1.5rem;
-    cursor: pointer;
+  .top-bar {
+    background: var(--header-bg);
+    padding: 1rem 0;
   }
 
   .container {
-    max-width: 1000px;
-    margin: 2.5rem auto;
-    padding: 0 1.5rem;
-    width: 100%;
-  }
-
-  .card {
-    background: var(--card);
-    padding: 2.5rem;
-    border-radius: 18px;
-    box-shadow: var(--shadow);
-  }
-
-  h1 {
-    margin-top: 0;
-    font-size: 2.4rem;
-  }
-
-  .instruction {
-    color: var(--muted);
-    margin-bottom: 2rem;
-    font-size: 1.1rem;
-  }
-
-  .subject-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1rem;
-  }
-
-  .subject-card {
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 1.2rem 1.4rem;
-    text-decoration: none;
-    color: inherit;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 2rem;
     display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    background: rgba(148, 163, 184, 0.08);
-    transition: transform 0.2s ease, border-color 0.2s ease;
+    justify-content: space-between;
+    align-items: center;
   }
 
-  .subject-card:hover {
-    transform: translateY(-3px);
-    border-color: var(--primary);
+  .logo {
+    font-size: 1.9rem;
+    font-weight: bold;
+    color: var(--text);
+    text-decoration: none;
   }
 
-  .subject-title {
-    font-weight: 700;
-    font-size: 1.1rem;
+  .right-controls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
   }
 
-  .subject-desc {
-    color: var(--muted);
+  .mode-btn {
+    background: none;
+    border: none;
+    font-size: 1.7rem;
+    cursor: pointer;
+    color: var(--text);
+  }
+
+  .profile-btn {
+    background: var(--accent);
+    color: white;
+    padding: 0.55rem 1.1rem;
+    border-radius: 6px;
+    text-decoration: none;
     font-size: 0.95rem;
   }
 
-  .cta {
-    margin-top: 2.5rem;
-    text-align: center;
-    padding: 2rem;
-    border-radius: 16px;
-    background: rgba(37, 99, 235, 0.08);
+  .content-area {
+    display: flex;
+    min-height: calc(100vh - 65px);
   }
 
-  .cta h2 {
-    margin-top: 0;
+  .sidebar {
+    width: 260px;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--accent);
+    padding: 2rem 1rem;
+    position: sticky;
+    top: 65px;
+    height: calc(100vh - 65px);
+    overflow-y: auto;
+  }
+
+  .menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .menu-title {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.2rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    border-radius: 8px;
+    background: var(--sidebar-bg);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: all 0.3s;
+  }
+
+  .menu-title:hover {
+    background: var(--sidebar-hover);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  .menu-title.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* odkazy "brzy" – ať to nikam neposílá */
+  .menu-title.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .menu-title.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .main-content {
+    flex: 1;
+    padding: 4rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  h1 { font-size: 2.8rem; margin-bottom: 1.5rem; }
+  p { font-size: 1.15rem; line-height: 1.6; max-width: 800px; }
+
+  .teaser-box {
+    margin-top: 4rem;
+    text-align: center;
+    padding: 2.5rem;
+    background: var(--sidebar-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
   }
 
   .start-btn {
-    display: inline-block;
-    margin-top: 1rem;
-    padding: 0.8rem 2rem;
-    border-radius: 10px;
-    background: var(--primary);
+    background: var(--accent);
     color: white;
+    padding: 1rem 2.5rem;
+    border-radius: 8px;
     text-decoration: none;
-    font-weight: 600;
+    font-size: 1.25rem;
+    display: inline-block;
+    margin-top: 1.5rem;
+  }
+
+  @media (max-width: 992px) {
+    .content-area { flex-direction: column; }
+    .sidebar {
+      width: 100%;
+      position: static;
+      height: auto;
+      border-right: none;
+      border-bottom: 1px solid var(--accent);
+      padding: 1.5rem;
+    }
+    .main-content { padding: 2.5rem 1.5rem; }
   }
 </style>
 
 <script>
+  // Dark/light mód
   const toggle = document.getElementById('mode-toggle');
   if (localStorage.getItem('mode') === 'dark' ||
       (!localStorage.getItem('mode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
